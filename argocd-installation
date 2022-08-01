@@ -1,0 +1,16 @@
+ → Öncelikle kubernetes cluster içerisine ArgoCD deploy edelim.
+
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+
+Sonrasında `kubectl get pod -n argocd -w` ile tüm podların up olmasını bekleyelim. ArgoCD UI erişmek için **“argocd-server”** isimli service üzerinde port-forward yaparak erişime açalım.
+
+`kubectl port-forward -n argocd svc/argocd-server 8080:443`
+
+127.0.0.1:8080 ile https üzerinde unsafe olarak UI kısmına erişebiliriz. Credential bilgileri için 
+
+`kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo`
+
+komutu ile şifreye ulaşıp **admin** kullanıcısı ile giriş yapabiliriz.
